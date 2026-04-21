@@ -1,24 +1,40 @@
 import onecode
+import geopandas as gpd # <-- Nouvelle biblio !
 
 def run():
-    # Ton premier widget qui marche
+    # --- LES WIDGETS D'UPLOAD (Nouveau) ---
+    fichier_geo = onecode.file_input(
+        key="input_geochimie",
+        label="1. Chargez vos points (GeoJSON)",
+        types=[("GeoJSON", ".geojson .json")]
+    )
+
+    fichier_mnt = onecode.file_input(
+        key="input_mnt",
+        label="2. Chargez votre MNT (TIFF)",
+        types=[("GeoTIFF", ".tif .tiff")]
+    )
+
+    # --- TES SLIDERS QUI MARCHENT ---
     sensibilite = onecode.slider(
         key="curseur_test",
         value=2.0,
         min=1.0,
         max=5.0,
-        step=0.1,
-        label="Niveau de détection (MAD)"
+        label="3. Niveau de détection (MAD)"
     )
 
-    # --- LE NOUVEAU WIDGET ---
     poids_au = onecode.slider(
         key="poids_or",
         value=0.5,
         min=0.0,
         max=1.0,
-        step=0.05,
-        label="Importance de l'Or (Au)"
+        label="4. Importance de l'Or (Au)"
     )
 
-    onecode.Logger.info(f"Sliders détectés : MAD={sensibilite}, Or={poids_au}")
+    # --- PETIT TEST DE LECTURE ---
+    if fichier_geo is not None:
+        data = gpd.read_file(fichier_geo)
+        onecode.Logger.info(f"Succès : {len(data)} points chargés depuis le GeoJSON !")
+    else:
+        onecode.Logger.info("En attente du fichier GeoJSON...")

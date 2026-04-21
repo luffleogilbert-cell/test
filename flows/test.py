@@ -1,19 +1,24 @@
 import onecode
 
-
 def run():
-    # --- LE SEUL ET UNIQUE WIDGET (Le Test de la Dernière Chance) ---
-    # Cette ligne DOIT créer un slider dans la colonne 'Input' de ton appli
-
+    # Ton premier widget qui marche
     sensibilite = onecode.slider(
-        key="curseur_test",  # Clé unique
-        value=2.0,  # Valeur par défaut
-        min=1.0,  # Minimum
-        max=5.0,  # Maximum
-        step=0.1,  # Incrément
-        label="Niveau de détection (MAD)"  # Le titre affiché
+        key="curseur_test",
+        value=2.0,
+        min=1.0,
+        max=5.0,
+        step=0.1,
+        label="Niveau de détection (MAD)"
     )
 
-    # --- LOGIQUE MINIMALE ---
-    onecode.Logger.info(f"Widget détecté avec succès ! Valeur du slider : {sensibilite}")
-    onecode.Logger.info("Si vous lisez ceci et ne voyez pas le slider, le problème vient du Cloud.")
+    # --- LE NOUVEAU WIDGET ---
+    poids_au = onecode.slider(
+        key="poids_or",
+        value=0.5,
+        min=0.0,
+        max=1.0,
+        step=0.05,
+        label="Importance de l'Or (Au)"
+    )
+
+    onecode.Logger.info(f"Sliders détectés : MAD={sensibilite}, Or={poids_au}")

@@ -38,7 +38,7 @@ def run():
             else:
                 data['score'] = 0
 
-            # Generation de la carte de potentiel
+            # Carte de potentiel
             fig1, ax1 = plt.subplots(figsize=(10, 8))
             with rasterio.open(f_mnt) as src:
                 mnt_data = src.read(1).astype(float)
@@ -57,7 +57,7 @@ def run():
             fig1.savefig(path_map, dpi=150, bbox_inches='tight')
             plt.close(fig1)
 
-            # Analyse en Composantes Principales
+            # Analyse en Composantes Principales (ACP)
             pca = PCA(n_components=2)
             pca.fit(z_scores)
             fig2, ax2 = plt.subplots(figsize=(8, 8))
@@ -74,11 +74,11 @@ def run():
             fig2.savefig(path_pca, dpi=120)
             plt.close(fig2)
 
-            # Histogrammes de distribution
+            # Histogrammes sans regression (kde=False)
             fig3, axes = plt.subplots(2, 2, figsize=(12, 10))
             for i, el in enumerate(elements):
                 curr_ax = axes[i//2, i%2]
-                sns.histplot(data[el], kde=True, ax=curr_ax)
+                sns.histplot(data[el], kde=False, ax=curr_ax, color='steelblue')
                 curr_ax.set_title(el)
             
             path_hist = onecode.file_output("histogrammes", "distributions.png")

@@ -1,19 +1,25 @@
 import onecode
 
 def run():
-    # TEST : On utilise des clés simples sans imports complexes
+    # --- COMPARTIMENTS POUR DRAG & DROP / UPLOAD ---
+    # On définit une valeur vide par défaut comme l'exige la doc
+    
     f_geo = onecode.file_input(
         key="input_geochimie",
-        label="1. Chargez vos points (GeoJSON)"
+        value="", 
+        label="1. Déposez votre GeoJSON ici",
+        optional=True
     )
 
     f_mnt = onecode.file_input(
         key="input_mnt",
-        label="2. Chargez votre MNT (TIFF)"
+        value="",
+        label="2. Déposez votre MNT (TIFF) ici",
+        optional=True
     )
 
-    # Tes sliders qui marchent
-    sensibilite = onecode.slider(
+    # --- TES SLIDERS (On ne change pas ce qui marche) ---
+    s1 = onecode.slider(
         key="curseur_test",
         value=2.0,
         min=1.0,
@@ -21,7 +27,7 @@ def run():
         label="3. Niveau de détection (MAD)"
     )
 
-    poids_au = onecode.slider(
+    s2 = onecode.slider(
         key="poids_or",
         value=0.5,
         min=0.0,
@@ -29,4 +35,4 @@ def run():
         label="4. Importance de l'Or (Au)"
     )
 
-    onecode.Logger.info("Vérification de l'affichage des champs d'upload...")
+    onecode.Logger.info("Interface prête : Sliders et Zones d'upload activés.")

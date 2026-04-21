@@ -18,10 +18,9 @@ def run():
 
     if f_geo and f_mnt and len(str(f_geo)) > 4:
         try:
-            onecode.Logger.info("Lecture des données...")
+            onecode.Logger.info("Lecture et calcul des scores...")
             data = gpd.read_file(f_geo)
             
-            # Calcul Z-Score
             for el in ['Au', 'As', 'W', 'Bi']:
                 if el in data.columns:
                     std = data[el].std()
@@ -30,6 +29,7 @@ def run():
             data['score'] = (data.get('Au_z', 0) * w_au + data.get('As_z', 0) * w_as + 
                              data.get('W_z', 0) * w_w + data.get('Bi_z', 0) * w_bi)
 
+            # --- 2. GÉNÉRATION DE LA CARTE ---
             fig, ax = plt.subplots(figsize=(10, 8))
             with rasterio.open(f_mnt) as src:
                 extent = [src.bounds.left, src.bounds.right, src.bounds.bottom, src.bounds.top]
@@ -38,21 +38,20 @@ def run():
             sc = ax.scatter(data.geometry.x, data.geometry.y, c=data['score'], 
                             cmap='hot_r', s=25, alpha=0.8)
             plt.colorbar(sc, ax=ax, label='Score de potentiel')
-            ax.set_title("Carte de Potentiel Minéral - Ambazac")
+            ax.set_title("Analyse Potentiel Ambazac")
 
-            # --- 2. SAUVEGARDE (Syntaxe ultra-compatible) ---
-            # Au lieu d'utiliser Project().output_dir qui cause l'erreur, 
-            # On laisse OneCode gérer le dossier via la fonction native
+            # --- 3. SORTIE OFFICIELLE ONECODE ---
+            # On utilise image_output pour que OneCode l'ajoute au ZIP et à l'interface
+            onecode.image_output(
+                key="ma_carte_finale",
+                value=fig,
+                path="carte_potentiel.png"
+            )
             
-            filename = "carte_potentiel.png"
-            # On utilise le chemin courant "." qui est souvent mappé vers l'output par défaut
-            plt.savefig(filename, dpi=120)
             plt.close(fig)
-            
-            # On "déclare" la sortie pour que OneCode la capture
-            onecode.Logger.info(f"✅ Tentative de capture de : {filename}")
+            onecode.Logger.info("✅ Carte déclarée dans les sorties OneCode.")
 
         except Exception as e:
-            onecode.Logger.error(f"❌ ERREUR DURANT L'ANALYSE : {str(e)}")
+            onecode.Logger.error(f"❌ ERREUR : {str(e)}")
     else:
         onecode.Logger.info("⚠️ En attente des fichiers...")

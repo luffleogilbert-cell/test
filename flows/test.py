@@ -1,21 +1,18 @@
 import onecode
-import geopandas as gpd # <-- Nouvelle biblio !
 
 def run():
-    # --- LES WIDGETS D'UPLOAD (Nouveau) ---
-    fichier_geo = onecode.file_input(
+    # TEST : On utilise des clés simples sans imports complexes
+    f_geo = onecode.file_input(
         key="input_geochimie",
-        label="1. Chargez vos points (GeoJSON)",
-        types=[("GeoJSON", ".geojson .json")]
+        label="1. Chargez vos points (GeoJSON)"
     )
 
-    fichier_mnt = onecode.file_input(
+    f_mnt = onecode.file_input(
         key="input_mnt",
-        label="2. Chargez votre MNT (TIFF)",
-        types=[("GeoTIFF", ".tif .tiff")]
+        label="2. Chargez votre MNT (TIFF)"
     )
 
-    # --- TES SLIDERS QUI MARCHENT ---
+    # Tes sliders qui marchent
     sensibilite = onecode.slider(
         key="curseur_test",
         value=2.0,
@@ -32,9 +29,4 @@ def run():
         label="4. Importance de l'Or (Au)"
     )
 
-    # --- PETIT TEST DE LECTURE ---
-    if fichier_geo is not None:
-        data = gpd.read_file(fichier_geo)
-        onecode.Logger.info(f"Succès : {len(data)} points chargés depuis le GeoJSON !")
-    else:
-        onecode.Logger.info("En attente du fichier GeoJSON...")
+    onecode.Logger.info("Vérification de l'affichage des champs d'upload...")
